@@ -59,7 +59,7 @@ impl GildedRose {
                     if !self.items[i].name.contains("Backstage passes") && self.items[i].quality > 0 && !self.items[i].name.contains("Sulfaras") {
                         self.items[i].quality = self.items[i].quality - 1;
                     } else {
-                        self.items[i].quality = self.items[i].quality - self.items[i].quality;
+                        self.items[i].quality = 0;
                     }
                 } else {
                     if self.items[i].quality < 50 {
