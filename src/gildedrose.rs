@@ -52,14 +52,14 @@ impl GildedRose {
             }
 
             if self.items[i].sell_in < 1 {
-                if self.items[i].name != "Aged Brie" {
-                    if self.items[i].name.contains("Backstage passes") || self.items[i].name.contains("Sulfaras") {
-                        self.items[i].quality = 0;
-                    } else {
-                        self.items[i].quality = (self.items[i].quality - 1).max(0);
-                    }
-                } else {
+                if self.items[i].name == "Aged Brie" {
                     self.items[i].quality = (self.items[i].quality + 1).min(50);
+                } else if self.items[i].name.contains("Backstage passes") {
+                    self.items[i].quality = 0;
+                } else if self.items[i].name.contains("Sulfuras") {
+                    // Noop
+                } else {
+                    self.items[i].quality = (self.items[i].quality - 1).max(0);
                 }
             }
 
