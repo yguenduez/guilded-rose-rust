@@ -33,10 +33,10 @@ impl GildedRose {
 
     pub fn update_quality(&mut self) {
         for i in 0..self.items.len() {
-            if self.items[i].name != "Aged Brie" && self.items[i].name != "Backstage passes to a TAFKAL80ETC concert"
+            if self.items[i].name != "Aged Brie" && !self.items[i].name.contains("Backstage passes")
             {
                 if self.items[i].quality > 0 {
-                    if self.items[i].name != "Sulfuras, Hand of Ragnaros" {
+                    if !self.items[i].name.contains("Sulfuras") {
                         self.items[i].quality = self.items[i].quality - 1;
                     }
                 }
@@ -44,7 +44,7 @@ impl GildedRose {
                 if self.items[i].quality < 50 {
                     self.items[i].quality = self.items[i].quality + 1;
 
-                    if self.items[i].name == "Backstage passes to a TAFKAL80ETC concert" {
+                    if self.items[i].name.contains("Backstage passes") {
                         if self.items[i].sell_in < 11 {
                             if self.items[i].quality < 50 {
                                 self.items[i].quality = self.items[i].quality + 1;
@@ -60,15 +60,15 @@ impl GildedRose {
                 }
             }
 
-            if self.items[i].name != "Sulfuras, Hand of Ragnaros" {
+            if !self.items[i].name.contains("Sulfuras") {
                 self.items[i].sell_in = self.items[i].sell_in - 1;
             }
 
             if self.items[i].sell_in < 0 {
                 if self.items[i].name != "Aged Brie" {
-                    if self.items[i].name != "Backstage passes to a TAFKAL80ETC concert" {
+                    if !self.items[i].name.contains("Backstage passes") {
                         if self.items[i].quality > 0 {
-                            if self.items[i].name != "Sulfuras, Hand of Ragnaros" {
+                            if !self.items[i].name.contains("Sulfaras") {
                                 self.items[i].quality = self.items[i].quality - 1;
                             }
                         }
@@ -93,7 +93,7 @@ mod tests {
         #[test]
         fn when_updated_then_does_not_alter_quality() {
             // given
-            let item = Item::new("Sulfuras, Hand of Ragnaros", 20, 80);
+            let item = Item::new("Sulfuras", 20, 80);
             let mut rose = GildedRose::new(vec![item]);
 
             // when
@@ -106,7 +106,7 @@ mod tests {
         #[test]
         fn when_updated_then_does_not_alter_sell_in() {
             // given
-            let item = Item::new("Sulfuras, Hand of Ragnaros", 20, 80);
+            let item = Item::new("Sulfuras", 20, 80);
             let mut rose = GildedRose::new(vec![item]);
 
             // when
@@ -222,7 +222,7 @@ mod tests {
         #[test]
         fn when_updated_then_increases_in_quality() {
             // given
-            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 11, 10);
+            let item = Item::new("Backstage passes", 11, 10);
             let mut rose = GildedRose::new(vec![item]);
 
             // when
@@ -235,7 +235,7 @@ mod tests {
         #[test]
         fn given_10_days_when_updated_then_increases_in_quality_by_two() {
             // given
-            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 10, 10);
+            let item = Item::new("Backstage passes", 10, 10);
             let mut rose = GildedRose::new(vec![item]);
 
             // when
@@ -248,7 +248,7 @@ mod tests {
         #[test]
         fn given_5_days_when_updated_then_increases_in_quality_by_three() {
             // given
-            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 5, 10);
+            let item = Item::new("Backstage passes", 5, 10);
             let mut rose = GildedRose::new(vec![item]);
 
             // when
@@ -259,9 +259,9 @@ mod tests {
         }
 
         #[test]
-        fn given_0_days_when_updated_quality_drops_to_zero(){
+        fn given_0_days_when_updated_quality_drops_to_zero() {
             // given
-            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 0, 10);
+            let item = Item::new("Backstage passes", 0, 10);
             let mut rose = GildedRose::new(vec![item]);
 
             // when
@@ -272,9 +272,9 @@ mod tests {
         }
 
         #[test]
-        fn when_updated_then_sell_in_decreases(){
+        fn when_updated_then_sell_in_decreases() {
             // given
-            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 2, 0);
+            let item = Item::new("Backstage passes", 2, 0);
             let mut rose = GildedRose::new(vec![item]);
 
             // when
