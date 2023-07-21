@@ -32,6 +32,10 @@ impl GildedRose {
     }
 
     pub fn update_quality(&mut self) {
+        if !self.items[i].name.contains("Sulfuras") {
+            self.items[i].sell_in = self.items[i].sell_in - 1;
+        }
+
         for i in 0..self.items.len() {
             if self.items[i].name != "Aged Brie" && !self.items[i].name.contains("Backstage passes")
             {
@@ -54,10 +58,6 @@ impl GildedRose {
                         }
                     }
                 }
-            }
-
-            if !self.items[i].name.contains("Sulfuras") {
-                self.items[i].sell_in = self.items[i].sell_in - 1;
             }
 
             if self.items[i].sell_in < 0 {
