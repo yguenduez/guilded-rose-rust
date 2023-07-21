@@ -1,4 +1,5 @@
 use std::fmt::{self, Display};
+
 pub struct Item {
     pub name: String,
     pub sell_in: i32,
@@ -86,14 +87,201 @@ impl GildedRose {
 
 #[cfg(test)]
 mod tests {
-    use super::{GildedRose, Item};
+    mod ragnaros {
+        use crate::gildedrose::{GildedRose, Item};
 
-    #[test]
-    pub fn foo() {
-        let items = vec![Item::new("foo", 0, 0)];
-        let mut rose = GildedRose::new(items);
-        rose.update_quality();
+        #[test]
+        fn when_updated_then_does_not_alter_quality() {
+            // given
+            let item = Item::new("Sulfuras, Hand of Ragnaros", 20, 80);
+            let mut rose = GildedRose::new(vec![item]);
 
-        assert_eq!("fixme", rose.items[0].name);
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 80);
+        }
+
+        #[test]
+        fn when_updated_then_does_not_alter_sell_in() {
+            // given
+            let item = Item::new("Sulfuras, Hand of Ragnaros", 20, 80);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].sell_in, 20);
+        }
+    }
+
+    mod normal_item {
+        use crate::gildedrose::{GildedRose, Item};
+
+        #[test]
+        fn when_updated_then_decreases_in_quality() {
+            // given
+            let item = Item::new("Item", 10, 80);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 79);
+        }
+
+        #[test]
+        fn when_updated_then_sell_in_decreases() {
+            // given
+            let item = Item::new("Item", 10, 80);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].sell_in, 9);
+        }
+
+        #[test]
+        fn given_zero_quality_when_updated_then_quality_is_zero() {
+            // given
+            let item = Item::new("Item", 10, 0);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 0);
+        }
+
+        #[test]
+        fn given_surpassed_sell_date_when_updated_quality_decreases_by_two() {
+            // given
+            let item = Item::new("Item", 0, 4);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 2);
+        }
+    }
+
+    mod aged_brie {
+        use crate::gildedrose::{GildedRose, Item};
+
+        #[test]
+        fn when_updated_then_sell_in_decreases() {
+            // given
+            let item = Item::new("Aged Brie", 2, 10);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].sell_in, 1);
+        }
+
+        #[test]
+        fn when_updated_then_increases_in_quality() {
+            // given
+            let item = Item::new("Aged Brie", 2, 10);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 11);
+        }
+
+        #[test]
+        fn given_quality_of_50_when_updated_then_does_not_alter_quality() {
+            // given
+            let item = Item::new("Aged Brie", 20, 50);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 50);
+        }
+    }
+
+    mod backstage_passes {
+        use crate::gildedrose::{GildedRose, Item};
+
+        #[test]
+        fn when_updated_then_increases_in_quality() {
+            // given
+            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 11, 10);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 11);
+        }
+
+        #[test]
+        fn given_10_days_when_updated_then_increases_in_quality_by_two() {
+            // given
+            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 10, 10);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 12);
+        }
+
+        #[test]
+        fn given_5_days_when_updated_then_increases_in_quality_by_three() {
+            // given
+            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 5, 10);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 13);
+        }
+
+        #[test]
+        fn given_0_days_when_updated_quality_drops_to_zero(){
+            // given
+            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 0, 10);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 0);
+        }
+
+        #[test]
+        fn when_updated_then_sell_in_decreases(){
+            // given
+            let item = Item::new("Backstage passes to a TAFKAL80ETC concert", 2, 0);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].sell_in, 1);
+        }
     }
 }
