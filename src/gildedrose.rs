@@ -48,11 +48,10 @@ impl GildedRose {
                         }
                     }
                 }
+            } else if self.items[i].name.contains("Sulfuras") { // NOOP }
             } else {
                 let new_decreased_quality = self.items[0].quality - 1;
-                if !self.items[i].name.contains("Sulfuras") {
-                    self.items[i].quality = new_decreased_quality.max(0);
-                }
+                self.items[i].quality = new_decreased_quality.max(0);
             }
 
             if self.items[i].sell_in < 1 {
