@@ -1,8 +1,2 @@
-bin
-obj
-*.sln.DotSettings.user
-.vs
-vendor
+target/
 .idea
-*.iml
-csharpcore/GildedRoseTests/ApprovalTest.ThirtyDays.received.txt
