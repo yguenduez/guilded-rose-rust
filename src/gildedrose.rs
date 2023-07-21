@@ -45,16 +45,12 @@ impl GildedRose {
                     self.items[i].quality = self.items[i].quality + 1;
 
                     if self.items[i].name.contains("Backstage passes") {
-                        if self.items[i].sell_in < 11 {
-                            if self.items[i].quality < 50 {
-                                self.items[i].quality = self.items[i].quality + 1;
-                            }
+                        if self.items[i].sell_in < 11 && self.items[i].quality < 50 {
+                            self.items[i].quality = self.items[i].quality + 1;
                         }
 
-                        if self.items[i].sell_in < 6 {
-                            if self.items[i].quality < 50 {
-                                self.items[i].quality = self.items[i].quality + 1;
-                            }
+                        if self.items[i].sell_in < 6 && self.items[i].quality < 50 {
+                            self.items[i].quality = self.items[i].quality + 1;
                         }
                     }
                 }
@@ -66,12 +62,8 @@ impl GildedRose {
 
             if self.items[i].sell_in < 0 {
                 if self.items[i].name != "Aged Brie" {
-                    if !self.items[i].name.contains("Backstage passes") {
-                        if self.items[i].quality > 0 {
-                            if !self.items[i].name.contains("Sulfaras") {
-                                self.items[i].quality = self.items[i].quality - 1;
-                            }
-                        }
+                    if !self.items[i].name.contains("Backstage passes") && self.items[i].quality > 0 && !self.items[i].name.contains("Sulfaras") {
+                        self.items[i].quality = self.items[i].quality - 1;
                     } else {
                         self.items[i].quality = self.items[i].quality - self.items[i].quality;
                     }
