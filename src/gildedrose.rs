@@ -35,8 +35,9 @@ impl GildedRose {
         for i in 0..self.items.len() {
             if self.items[i].name != "Aged Brie" && !self.items[i].name.contains("Backstage passes")
             {
-                if self.items[i].quality > 0 && !self.items[i].name.contains("Sulfuras") {
-                    self.items[i].quality = self.items[i].quality - 1;
+                let new_decreased_quality = self.items[0].quality - 1;
+                if !self.items[i].name.contains("Sulfuras") {
+                    self.items[i].quality = new_decreased_quality.max(0);
                 }
             } else {
                 if self.items[i].quality < 50 {
