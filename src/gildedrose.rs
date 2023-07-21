@@ -71,7 +71,7 @@ impl GildedRose {
             }
 
             if !self.items[i].name.contains("Sulfuras") {
-                self.items[i].sell_in = self.items[i].sell_in - 1;
+                self.items[i].sell_in -= 1;
             }
         }
     }
