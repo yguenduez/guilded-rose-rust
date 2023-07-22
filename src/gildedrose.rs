@@ -38,19 +38,9 @@ impl GildedRose {
 
             let added_quality = if self.items[i].name == "Aged Brie"
             {
-                if sell_in < 1 {
-                    2
-                } else { 1 }
+                -GildedRose::calculate_item_quality_decrease(sell_in)
             } else if self.items[i].name.contains("Backstage passes") {
-                if sell_in < 11 && sell_in > 5 {
-                    2
-                } else if sell_in <= 5 && sell_in > 0 {
-                    3
-                } else if sell_in <= 0 {
-                    -quality
-                } else {
-                    1
-                }
+                GildedRose::calculate_backstage_pass_quality_decrease(sell_in, quality)
             } else if self.items[i].name.contains("Sulfuras") {
                 0// NOOP }
             } else {
@@ -61,6 +51,18 @@ impl GildedRose {
                 self.items[i].quality = (quality + added_quality).min(50).max(0);
                 self.items[i].sell_in -= 1;
             }
+        }
+    }
+
+    fn calculate_backstage_pass_quality_decrease(sell_in: i32, quality: i32) -> i32 {
+        if sell_in < 11 && sell_in > 5 {
+            2
+        } else if sell_in <= 5 && sell_in > 0 {
+            3
+        } else if sell_in <= 0 {
+            -quality
+        } else {
+            1
         }
     }
 
