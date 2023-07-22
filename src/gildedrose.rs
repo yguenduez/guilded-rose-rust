@@ -38,38 +38,27 @@ impl GildedRose {
 
             let added_quality = if self.items[i].name == "Aged Brie"
             {
-                let added_quality = {
-                    if sell_in < 1 {
-                        2
-                    } else {
-                        1
-                    }
-                };
-                added_quality
+                if sell_in < 1 {
+                    2
+                } else { 1 }
             } else if self.items[i].name.contains("Backstage passes") {
-                let added_quality = {
-                    if sell_in < 11 && sell_in > 5 {
-                        2
-                    } else if sell_in <= 5 && sell_in > 0 {
-                        3
-                    } else if sell_in <= 0 {
-                        -quality
-                    } else {
-                        1
-                    }
-                };
-                added_quality
+                if sell_in < 11 && sell_in > 5 {
+                    2
+                } else if sell_in <= 5 && sell_in > 0 {
+                    3
+                } else if sell_in <= 0 {
+                    -quality
+                } else {
+                    1
+                }
             } else if self.items[i].name.contains("Sulfuras") {
                 0// NOOP }
             } else {
-                let added_quality = {
-                    if sell_in < 1 {
-                        -2
-                    } else {
-                        -1
-                    }
-                };
-                added_quality
+                if sell_in < 1 {
+                    -2
+                } else {
+                    -1
+                }
             };
 
             if !self.items[i].name.contains("Sulfuras") {
