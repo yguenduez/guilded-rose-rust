@@ -117,20 +117,20 @@ mod tests {
         #[test]
         fn when_updated_then_decreases_in_quality() {
             // given
-            let item = Item::new("Item", 10, 80);
+            let item = Item::new("Item", 10, 50);
             let mut rose = GildedRose::new(vec![item]);
 
             // when
             rose.update_quality();
 
             // then
-            assert_eq!(rose.items[0].quality, 79);
+            assert_eq!(rose.items[0].quality, 49);
         }
 
         #[test]
         fn when_updated_then_sell_in_decreases() {
             // given
-            let item = Item::new("Item", 10, 80);
+            let item = Item::new("Item", 10, 50);
             let mut rose = GildedRose::new(vec![item]);
 
             // when
