@@ -58,6 +58,23 @@ impl CalculateQuality for DefaultItem {
     }
 }
 
+struct QualityCalculatorFactory;
+
+impl QualityCalculatorFactory {
+    fn create_from(item: &Item) -> Box<dyn CalculateQuality> {
+        if item.name == "Aged Brie"
+        {
+            Box::new(AgedBrie)
+        } else if item.name.contains("Backstage passes") {
+            Box::new(BackstagePasses)
+        } else if item.name.contains("Sulfuras") {
+            Box::new(Sulfuras)
+        } else {
+            Box::new(DefaultItem)
+        }
+    }
+}
+
 pub struct GildedRose {
     pub items: Vec<Item>,
 }
@@ -83,16 +100,8 @@ impl GildedRose {
     }
 
     fn calculate_quality(&self, item: &Item) -> i32 {
-        if item.name == "Aged Brie"
-        {
-            AgedBrie.calculate_new_quality(item.sell_in, item.quality)
-        } else if item.name.contains("Backstage passes") {
-            BackstagePasses.calculate_new_quality(item.sell_in, item.quality)
-        } else if item.name.contains("Sulfuras") {
-            Sulfuras.calculate_new_quality(item.sell_in, item.quality)
-        } else {
-            DefaultItem.calculate_new_quality(item.sell_in, item.quality)
-        }
+        let calculator = QualityCalculatorFactory::create_from(&item);
+        calculator.calculate_new_quality(item.sell_in, item.quality)
     }
 
     fn calculate_backstage_pass_quality_increment(sell_in: i32, quality: i32) -> i32 {
