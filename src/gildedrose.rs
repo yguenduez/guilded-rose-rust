@@ -36,18 +36,15 @@ impl GildedRose {
             let sell_in = self.items[i].sell_in;
             let quality = self.items[i].quality;
 
-            let added_quality = self.calculate_quality_increment(&self.items[i], sell_in, quality);
+            let new_quality = self.calculate_quality(&self.items[i], sell_in, quality);
             let added_sell_in = self.calculate_sell_in_increment(&self.items[i]);
 
-            if !self.items[i].name.contains("Sulfuras") {
-                self.items[i].quality = (quality + added_quality).min(50).max(0);
-            }
-
+            self.items[i].quality = new_quality;
             self.items[i].sell_in = sell_in + added_sell_in;
         }
     }
 
-    fn calculate_sell_in_increment(&mut self, item: &Item) -> i32 {
+    fn calculate_sell_in_increment(&self, item: &Item) -> i32 {
         if item.name.contains("Sulfuras") {
             0
         } else {
@@ -55,18 +52,20 @@ impl GildedRose {
         }
     }
 
-    fn calculate_quality_increment(&self, item: &Item, sell_in: i32, quality: i32) -> i32 {
-        let added_quality = if item.name == "Aged Brie"
+    fn calculate_quality(&self, item: &Item, sell_in: i32, quality: i32) -> i32 {
+        if item.name == "Aged Brie"
         {
-            -GildedRose::calculate_item_quality_decrease(sell_in)
+            let increment = -GildedRose::calculate_item_quality_decrease(sell_in);
+            (quality + increment).min(50)
         } else if item.name.contains("Backstage passes") {
-            GildedRose::calculate_backstage_pass_quality_decrease(sell_in, quality)
+            let increment = GildedRose::calculate_backstage_pass_quality_decrease(sell_in, quality);
+            (quality + increment).min(50)
         } else if item.name.contains("Sulfuras") {
-            0// NOOP }
+            80// NOOP }
         } else {
-            GildedRose::calculate_item_quality_decrease(sell_in)
-        };
-        added_quality
+            let increment = GildedRose::calculate_item_quality_decrease(sell_in);
+            (quality + increment).max(0)
+        }
     }
 
     fn calculate_backstage_pass_quality_decrease(sell_in: i32, quality: i32) -> i32 {
