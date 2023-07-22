@@ -37,10 +37,11 @@ impl GildedRose {
             let quality = self.items[i].quality;
 
             let added_quality = self.calculate_quality_increment(&self.items[i], sell_in, quality);
+            let added_sell_in = -1;
 
             if !self.items[i].name.contains("Sulfuras") {
                 self.items[i].quality = (quality + added_quality).min(50).max(0);
-                self.items[i].sell_in -= 1;
+                self.items[i].sell_in = sell_in + added_sell_in;
             }
         }
     }
