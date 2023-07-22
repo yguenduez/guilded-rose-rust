@@ -37,17 +37,21 @@ impl GildedRose {
             let quality = self.items[i].quality;
 
             let added_quality = self.calculate_quality_increment(&self.items[i], sell_in, quality);
-            let added_sell_in = if self.items[i].name.contains("Sulfuras") {
-                0
-            } else {
-                -1
-            };
+            let added_sell_in = self.calculate_sell_in_increment(&self.items[i]);
 
             if !self.items[i].name.contains("Sulfuras") {
                 self.items[i].quality = (quality + added_quality).min(50).max(0);
             }
 
             self.items[i].sell_in = sell_in + added_sell_in;
+        }
+    }
+
+    fn calculate_sell_in_increment(&mut self, item: &Item) -> i32 {
+        if item.name.contains("Sulfuras") {
+            0
+        } else {
+            -1
         }
     }
 
