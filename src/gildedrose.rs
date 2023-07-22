@@ -33,10 +33,15 @@ trait CalculateSellIn {
 }
 
 struct AgedBrie;
+impl AgedBrie{
+    fn calculate_quality_increment(sell_in: i32) -> i32 {
+        GildedRose::calculate_item_quality_increment(sell_in)
+    }
+}
 
 impl CalculateQuality for AgedBrie {
     fn calculate_new_quality(&self, sell_in: i32, quality: i32) -> i32 {
-        (quality - GildedRose::calculate_item_quality_increment(sell_in)).min(50)
+        (quality - Self::calculate_quality_increment(sell_in)).min(50)
     }
 }
 
