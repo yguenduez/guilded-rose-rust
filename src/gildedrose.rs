@@ -22,6 +22,18 @@ impl Display for Item {
     }
 }
 
+trait CalculateQuality {
+    fn calculate_new_quality(&self, sell_in: i32, quality: i32) -> i32;
+}
+
+struct AgedBrie;
+
+impl CalculateQuality for AgedBrie {
+    fn calculate_new_quality(&self, sell_in: i32, quality: i32) -> i32 {
+        (quality - GildedRose::calculate_item_quality_increment(sell_in)).min(50)
+    }
+}
+
 pub struct GildedRose {
     pub items: Vec<Item>,
 }
@@ -44,13 +56,12 @@ impl GildedRose {
         } else {
             item.sell_in - 1
         }
-
     }
 
     fn calculate_quality(&self, item: &Item) -> i32 {
         if item.name == "Aged Brie"
         {
-            (item.quality - GildedRose::calculate_item_quality_increment(item.sell_in)).min(50)
+            AgedBrie.calculate_new_quality(item.sell_in, item.quality)
         } else if item.name.contains("Backstage passes") {
             (item.quality + GildedRose::calculate_backstage_pass_quality_increment(item.sell_in, item.quality)).min(50)
         } else if item.name.contains("Sulfuras") {
