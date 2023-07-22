@@ -37,10 +37,15 @@ impl GildedRose {
 
             if self.items[i].name == "Aged Brie"
             {
-                self.items[i].quality = (self.items[i].quality + 1).min(50);
-                if sell_in < 1 {
-                    self.items[i].quality = (self.items[i].quality + 1).min(50);
-                }
+                let current_quality = self.items[i].quality;
+                let added_quality = {
+                    if sell_in < 1 {
+                        2
+                    } else {
+                        1
+                    }
+                };
+                self.items[i].quality = (current_quality+added_quality).min(50);
             } else if self.items[i].name.contains("Backstage passes") {
                 let current_quality = self.items[i].quality;
                 let added_quality = {
