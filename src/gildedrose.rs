@@ -55,20 +55,20 @@ impl GildedRose {
     fn calculate_quality(&self, item: &Item, sell_in: i32, quality: i32) -> i32 {
         if item.name == "Aged Brie"
         {
-            let increment = -GildedRose::calculate_item_quality_decrease(sell_in);
+            let increment = -GildedRose::calculate_item_quality_increment(sell_in);
             (quality + increment).min(50)
         } else if item.name.contains("Backstage passes") {
-            let increment = GildedRose::calculate_backstage_pass_quality_decrease(sell_in, quality);
+            let increment = GildedRose::calculate_backstage_pass_quality_increment(sell_in, quality);
             (quality + increment).min(50)
         } else if item.name.contains("Sulfuras") {
             80// NOOP }
         } else {
-            let increment = GildedRose::calculate_item_quality_decrease(sell_in);
+            let increment = GildedRose::calculate_item_quality_increment(sell_in);
             (quality + increment).max(0)
         }
     }
 
-    fn calculate_backstage_pass_quality_decrease(sell_in: i32, quality: i32) -> i32 {
+    fn calculate_backstage_pass_quality_increment(sell_in: i32, quality: i32) -> i32 {
         if sell_in < 11 && sell_in > 5 {
             2
         } else if sell_in <= 5 && sell_in > 0 {
@@ -80,7 +80,7 @@ impl GildedRose {
         }
     }
 
-    fn calculate_item_quality_decrease(sell_in: i32) -> i32 {
+    fn calculate_item_quality_increment(sell_in: i32) -> i32 {
         if sell_in < 1 {
             -2
         } else {
