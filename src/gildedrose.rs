@@ -42,16 +42,20 @@ impl GildedRose {
                     self.items[i].quality = (self.items[i].quality + 1).min(50);
                 }
             } else if self.items[i].name.contains("Backstage passes") {
-                self.items[i].quality = (self.items[i].quality + 1).min(50);
-                if sell_in < 11 {
-                    self.items[i].quality = (self.items[i].quality + 1).min(50);
-                }
-                if sell_in < 6 {
-                    self.items[i].quality = (self.items[i].quality + 1).min(50);
-                }
-                if sell_in < 1 {
-                    self.items[i].quality = 0;
-                }
+                let current_quality = self.items[i].quality;
+                let added_quality = {
+                    if sell_in < 11 && sell_in > 5 {
+                        2
+                    } else if sell_in <= 5 && sell_in > 0 {
+                        3
+                    } else if sell_in <= 0 {
+                        -current_quality
+                    } else {
+                        1
+                    }
+                };
+
+                self.items[i].quality = (current_quality + added_quality).min(50);
             } else if self.items[i].name.contains("Sulfuras") { // NOOP }
             } else {
                 let new_decreased_quality = self.items[0].quality - 1;
