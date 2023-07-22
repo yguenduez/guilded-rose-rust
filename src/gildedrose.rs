@@ -26,6 +26,12 @@ trait CalculateQuality {
     fn calculate_new_quality(&self, sell_in: i32, quality: i32) -> i32;
 }
 
+trait CalculateSellIn {
+    fn calculate_new_sell_in(&self, sell_in: i32) -> i32 {
+        sell_in - 1
+    }
+}
+
 struct AgedBrie;
 
 impl CalculateQuality for AgedBrie {
@@ -33,6 +39,8 @@ impl CalculateQuality for AgedBrie {
         (quality - GildedRose::calculate_item_quality_increment(sell_in)).min(50)
     }
 }
+
+impl CalculateSellIn for AgedBrie {}
 
 struct BackstagePasses;
 
@@ -42,11 +50,19 @@ impl CalculateQuality for BackstagePasses {
     }
 }
 
+impl CalculateSellIn for BackstagePasses {}
+
 struct Sulfuras;
 
 impl CalculateQuality for Sulfuras {
     fn calculate_new_quality(&self, _: i32, _: i32) -> i32 {
         80
+    }
+}
+
+impl CalculateSellIn for Sulfuras {
+    fn calculate_new_sell_in(&self, sell_in: i32) -> i32 {
+        sell_in
     }
 }
 
@@ -57,6 +73,8 @@ impl CalculateQuality for DefaultItem {
         (quality + GildedRose::calculate_item_quality_increment(sell_in)).max(0)
     }
 }
+
+impl CalculateSellIn for DefaultItem {}
 
 struct QualityCalculatorFactory;
 
@@ -93,9 +111,9 @@ impl GildedRose {
 
     fn calculate_sell_in(&self, item: &Item) -> i32 {
         if item.name.contains("Sulfuras") {
-            item.sell_in
+            Sulfuras.calculate_new_sell_in(item.sell_in)
         } else {
-            item.sell_in - 1
+            DefaultItem.calculate_new_sell_in(item.sell_in)
         }
     }
 
