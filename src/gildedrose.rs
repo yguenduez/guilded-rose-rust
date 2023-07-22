@@ -33,11 +33,8 @@ impl GildedRose {
 
     pub fn update_quality(&mut self) {
         for i in 0..self.items.len() {
-            let new_quality = self.calculate_quality(&self.items[i]);
-            let new_sell_in = self.calculate_sell_in(&self.items[i]);
-
-            self.items[i].quality = new_quality;
-            self.items[i].sell_in = new_sell_in;
+            self.items[i].quality = self.calculate_quality(&self.items[i]);
+            self.items[i].sell_in = self.calculate_sell_in(&self.items[i]);
         }
     }
 
