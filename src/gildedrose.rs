@@ -33,28 +33,30 @@ impl GildedRose {
 
     pub fn update_quality(&mut self) {
         for i in 0..self.items.len() {
+            let sell_in = self.items[i].sell_in;
+
             if self.items[i].name == "Aged Brie"
             {
                 self.items[i].quality = (self.items[i].quality + 1).min(50);
-                if self.items[i].sell_in < 1 {
+                if sell_in < 1 {
                     self.items[i].quality = (self.items[i].quality + 1).min(50);
                 }
             } else if self.items[i].name.contains("Backstage passes") {
                 self.items[i].quality = (self.items[i].quality + 1).min(50);
-                if self.items[i].sell_in < 11 {
+                if sell_in < 11 {
                     self.items[i].quality = (self.items[i].quality + 1).min(50);
                 }
-                if self.items[i].sell_in < 6 {
+                if sell_in < 6 {
                     self.items[i].quality = (self.items[i].quality + 1).min(50);
                 }
-                if self.items[i].sell_in < 1 {
+                if sell_in < 1 {
                     self.items[i].quality = 0;
                 }
             } else if self.items[i].name.contains("Sulfuras") { // NOOP }
             } else {
                 let new_decreased_quality = self.items[0].quality - 1;
                 self.items[i].quality = new_decreased_quality.max(0);
-                if self.items[i].sell_in < 1 {
+                if sell_in < 1 {
                     self.items[i].quality = (self.items[i].quality - 1).min(50);
                 }
             }
