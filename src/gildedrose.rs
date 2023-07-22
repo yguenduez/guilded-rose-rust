@@ -34,6 +34,30 @@ impl CalculateQuality for AgedBrie {
     }
 }
 
+struct BackstagePasses;
+
+impl CalculateQuality for BackstagePasses {
+    fn calculate_new_quality(&self, sell_in: i32, quality: i32) -> i32 {
+        (quality + GildedRose::calculate_backstage_pass_quality_increment(sell_in, quality)).min(50)
+    }
+}
+
+struct Sulfuras;
+
+impl CalculateQuality for Sulfuras {
+    fn calculate_new_quality(&self, _: i32, _: i32) -> i32 {
+        80
+    }
+}
+
+struct DefaultItem;
+
+impl CalculateQuality for DefaultItem {
+    fn calculate_new_quality(&self, sell_in: i32, quality: i32) -> i32 {
+        (quality + GildedRose::calculate_item_quality_increment(sell_in)).max(0)
+    }
+}
+
 pub struct GildedRose {
     pub items: Vec<Item>,
 }
@@ -63,11 +87,11 @@ impl GildedRose {
         {
             AgedBrie.calculate_new_quality(item.sell_in, item.quality)
         } else if item.name.contains("Backstage passes") {
-            (item.quality + GildedRose::calculate_backstage_pass_quality_increment(item.sell_in, item.quality)).min(50)
+            BackstagePasses.calculate_new_quality(item.sell_in, item.quality)
         } else if item.name.contains("Sulfuras") {
-            80// NOOP }
+            Sulfuras.calculate_new_quality(item.sell_in, item.quality)
         } else {
-            (item.quality + GildedRose::calculate_item_quality_increment(item.sell_in)).max(0)
+            DefaultItem.calculate_new_quality(item.sell_in, item.quality)
         }
     }
 
