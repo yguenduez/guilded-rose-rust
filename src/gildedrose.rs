@@ -76,10 +76,20 @@ impl CalculateQuality for DefaultItem {
 
 impl CalculateSellIn for DefaultItem {}
 
-struct QualityCalculatorFactory;
+struct CalculatorFactory;
 
-impl QualityCalculatorFactory {
-    fn create_calculator(item: &Item) -> Box<dyn CalculateQuality> {
+trait Calculations: CalculateQuality + CalculateSellIn {}
+
+impl Calculations for DefaultItem {}
+
+impl Calculations for Sulfuras {}
+
+impl Calculations for BackstagePasses {}
+
+impl Calculations for AgedBrie {}
+
+impl CalculatorFactory {
+    fn create_calculator(item: &Item) -> Box<dyn Calculations> {
         if item.name == "Aged Brie"
         {
             Box::new(AgedBrie)
@@ -110,15 +120,12 @@ impl GildedRose {
     }
 
     fn calculate_sell_in(&self, item: &Item) -> i32 {
-        if item.name.contains("Sulfuras") {
-            Sulfuras.calculate_new_sell_in(item.sell_in)
-        } else {
-            DefaultItem.calculate_new_sell_in(item.sell_in)
-        }
+        CalculatorFactory::create_calculator(&item)
+            .calculate_new_sell_in(item.sell_in)
     }
 
     fn calculate_quality(&self, item: &Item) -> i32 {
-        QualityCalculatorFactory::create_calculator(&item)
+        CalculatorFactory::create_calculator(&item)
             .calculate_new_quality(item.sell_in, item.quality)
     }
 
