@@ -61,7 +61,7 @@ impl CalculateQuality for DefaultItem {
 struct QualityCalculatorFactory;
 
 impl QualityCalculatorFactory {
-    fn create_from(item: &Item) -> Box<dyn CalculateQuality> {
+    fn create_calculator(item: &Item) -> Box<dyn CalculateQuality> {
         if item.name == "Aged Brie"
         {
             Box::new(AgedBrie)
@@ -100,8 +100,8 @@ impl GildedRose {
     }
 
     fn calculate_quality(&self, item: &Item) -> i32 {
-        let calculator = QualityCalculatorFactory::create_from(&item);
-        calculator.calculate_new_quality(item.sell_in, item.quality)
+        QualityCalculatorFactory::create_calculator(&item)
+            .calculate_new_quality(item.sell_in, item.quality)
     }
 
     fn calculate_backstage_pass_quality_increment(sell_in: i32, quality: i32) -> i32 {
