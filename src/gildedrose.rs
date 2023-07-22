@@ -190,6 +190,19 @@ mod tests {
         }
 
         #[test]
+        fn given_sell_in_date_when_updated_then_increases_in_quality_by_two(){
+            // given
+            let item = Item::new("Aged Brie", 0, 10);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 12);
+        }
+
+        #[test]
         fn given_quality_of_50_when_updated_then_does_not_alter_quality() {
             // given
             let item = Item::new("Aged Brie", 20, 50);
