@@ -36,7 +36,7 @@ impl GildedRose {
             let sell_in = self.items[i].sell_in;
             let quality = self.items[i].quality;
 
-            if self.items[i].name == "Aged Brie"
+            let added_quality = if self.items[i].name == "Aged Brie"
             {
                 let added_quality = {
                     if sell_in < 1 {
@@ -45,7 +45,7 @@ impl GildedRose {
                         1
                     }
                 };
-                self.items[i].quality = (quality+added_quality).min(50);
+                added_quality
             } else if self.items[i].name.contains("Backstage passes") {
                 let added_quality = {
                     if sell_in < 11 && sell_in > 5 {
@@ -58,9 +58,8 @@ impl GildedRose {
                         1
                     }
                 };
-
-                self.items[i].quality = (quality + added_quality).min(50);
-            } else if self.items[i].name.contains("Sulfuras") { // NOOP }
+                added_quality
+            } else if self.items[i].name.contains("Sulfuras") { 0// NOOP }
             } else {
                 let added_quality = {
                     if sell_in < 1 {
@@ -69,10 +68,11 @@ impl GildedRose {
                         -1
                     }
                 };
-                self.items[i].quality = (quality+added_quality).max(0);
-            }
+                added_quality
+            };
 
             if !self.items[i].name.contains("Sulfuras") {
+                self.items[i].quality = (quality + added_quality).min(50).max(0);
                 self.items[i].sell_in -= 1;
             }
         }
@@ -197,7 +197,7 @@ mod tests {
         }
 
         #[test]
-        fn given_sell_in_date_when_updated_then_increases_in_quality_by_two(){
+        fn given_sell_in_date_when_updated_then_increases_in_quality_by_two() {
             // given
             let item = Item::new("Aged Brie", 0, 10);
             let mut rose = GildedRose::new(vec![item]);
