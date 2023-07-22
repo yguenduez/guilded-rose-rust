@@ -54,17 +54,21 @@ impl GildedRose {
             } else if self.items[i].name.contains("Sulfuras") {
                 0// NOOP }
             } else {
-                if sell_in < 1 {
-                    -2
-                } else {
-                    -1
-                }
+                GildedRose::calculate_item_quality_decrease(sell_in)
             };
 
             if !self.items[i].name.contains("Sulfuras") {
                 self.items[i].quality = (quality + added_quality).min(50).max(0);
                 self.items[i].sell_in -= 1;
             }
+        }
+    }
+
+    fn calculate_item_quality_decrease(sell_in: i32) -> i32 {
+        if sell_in < 1 {
+            -2
+        } else {
+            -1
         }
     }
 }
