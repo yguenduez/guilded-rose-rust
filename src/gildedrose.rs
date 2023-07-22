@@ -36,7 +36,7 @@ impl GildedRose {
             let sell_in = self.items[i].sell_in;
             let quality = self.items[i].quality;
 
-            let added_quality = self.calculate_quality_increment(i, sell_in, quality);
+            let added_quality = self.calculate_quality_increment(&self.items[i], sell_in, quality);
 
             if !self.items[i].name.contains("Sulfuras") {
                 self.items[i].quality = (quality + added_quality).min(50).max(0);
@@ -45,13 +45,13 @@ impl GildedRose {
         }
     }
 
-    fn calculate_quality_increment(&mut self, i: usize, sell_in: i32, quality: i32) -> i32 {
-        let added_quality = if self.items[i].name == "Aged Brie"
+    fn calculate_quality_increment(&self, item: &Item, sell_in: i32, quality: i32) -> i32 {
+        let added_quality = if item.name == "Aged Brie"
         {
             -GildedRose::calculate_item_quality_decrease(sell_in)
-        } else if self.items[i].name.contains("Backstage passes") {
+        } else if item.name.contains("Backstage passes") {
             GildedRose::calculate_backstage_pass_quality_decrease(sell_in, quality)
-        } else if self.items[i].name.contains("Sulfuras") {
+        } else if item.name.contains("Sulfuras") {
             0// NOOP }
         } else {
             GildedRose::calculate_item_quality_decrease(sell_in)
