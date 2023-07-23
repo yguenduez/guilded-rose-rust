@@ -100,6 +100,22 @@ impl CalculateQuality for DefaultItem {
     }
 }
 
+struct ConjuredItem;
+
+impl ConjuredItem {
+    fn calculate_quality_increment(&self, sell_in: i32) -> i32 {
+        DefaultQualityIncrement::get(sell_in) * 2
+    }
+}
+
+impl CalculateQuality for ConjuredItem {
+    fn calculate_new_quality(&self, sell_in: i32, quality: i32) -> i32 {
+        (quality + self.calculate_quality_increment(sell_in)).max(0)
+    }
+}
+
+impl CalculateSellIn for ConjuredItem {}
+
 impl CalculateSellIn for DefaultItem {}
 
 struct CalculatorFactory;
@@ -114,6 +130,8 @@ impl Calculations for BackstagePasses {}
 
 impl Calculations for AgedBrie {}
 
+impl Calculations for ConjuredItem {}
+
 impl CalculatorFactory {
     fn create_calculator(item: &Item) -> Box<dyn Calculations> {
         if item.name == "Aged Brie"
@@ -123,6 +141,8 @@ impl CalculatorFactory {
             Box::new(BackstagePasses)
         } else if item.name.contains("Sulfuras") {
             Box::new(Sulfuras)
+        } else if item.name.contains("Conjured") {
+            Box::new(ConjuredItem)
         } else {
             Box::new(DefaultItem)
         }
