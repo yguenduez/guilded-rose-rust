@@ -88,9 +88,15 @@ impl CalculateSellIn for Sulfuras {
 
 struct DefaultItem;
 
+impl DefaultItem {
+    fn calculate_item_quality_increment(&self, sell_in: i32) -> i32 {
+        GildedRose::calculate_item_quality_increment(sell_in)
+    }
+}
+
 impl CalculateQuality for DefaultItem {
     fn calculate_new_quality(&self, sell_in: i32, quality: i32) -> i32 {
-        (quality + GildedRose::calculate_item_quality_increment(sell_in)).max(0)
+        (quality + self.calculate_item_quality_increment(sell_in)).max(0)
     }
 }
 
