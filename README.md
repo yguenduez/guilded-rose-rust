@@ -1,53 +1,92 @@
 # Gilded Rose Refactoring Kata
 
-This Kata was originally created by Terry Hughes (http://twitter.com/TerryHughes). It is already on GitHub [here](https://github.com/NotMyself/GildedRose). See also [Bobby Johnson's description of the kata](https://iamnotmyself.com/refactor-this-the-gilded-rose-kata/).
+Originally taken
+from: [https://github.com/emilybache/GildedRose-Refactoring-Kata](https://github.com/emilybache/GildedRose-Refactoring-Kata).
+I also used the book [Refactoring](https://martinfowler.com/books/refactoring.html) as reference.
 
-I translated the original C# into a few other languages, (with a little help from my friends!), and slightly changed the starting position. This means I've actually done a small amount of refactoring already compared with the original form of the kata, and made it easier to get going with writing tests by giving you one failing unit test to start with. I also added test fixtures for Text-Based approval testing with TextTest (see [the TextTests](https://github.com/emilybache/GildedRose-Refactoring-Kata/tree/main/texttests))
+**Summing it up**: Refactoring code - so it's maintainable again. The starting code sample is exemplary for legacy code.
+A
+lot of nested branches, duplicated code, complicated logic and no tests.
 
-As Bobby Johnson points out in his article ["Why Most Solutions to Gilded Rose Miss The Bigger Picture"](https://iamnotmyself.com/why-most-solutions-to-gilded-rose-miss-the-bigger-picture/), it'll actually give you
-better practice at handling a legacy code situation if you do this Kata in the original C#. However, I think this kata
-is also really useful for practicing writing good tests using different frameworks and approaches, and the small changes I've made help with that. I think it's also interesting to compare what the refactored code and tests look like in different programming languages.
+## Requirements
 
-I use this kata as part of my work as a technical coach. I wrote a lot about the coaching method I use in this book [Technical Agile Coaching with the Samman method](https://leanpub.com/techagilecoach). A while back I wrote this article ["Writing Good Tests for the Gilded Rose Kata"](http://coding-is-like-cooking.info/2013/03/writing-good-tests-for-the-gilded-rose-kata/) about how you could use this kata in a [coding dojo](https://leanpub.com/codingdojohandbook).
+For the requirements of this challenge, have a look [here](GildedRoseRequirements.txt)
 
-## How to use this Kata
+## Steps taken
 
-The simplest way is to just clone the code and start hacking away improving the design. You'll want to look at the ["Gilded Rose Requirements"](https://github.com/emilybache/GildedRose-Refactoring-Kata/blob/main/GildedRoseRequirements.txt) which explains what the code is for. I strongly advise you that you'll also need some tests if you want to make sure you don't break the code while you refactor.
+Here are the steps I took. I tried to make them as small as possible - see the git history for detailed reference.
 
-You could write some unit tests yourself, using the requirements to identify suitable test cases. I've provided a failing unit test in a popular test framework as a starting point for most languages.
+### V0.0.1
 
-Alternatively, use the "Text-Based" tests provided in this repository. (Read more about that in the next section)
+- Starting point - clone repo and throw anything out except the rust part
 
-Whichever testing approach you choose, the idea of the exercise is to do some deliberate practice, and improve your skills at designing test cases and refactoring. The idea is not to re-write the code from scratch, but rather to practice designing tests, taking small steps, running the tests often, and incrementally improving the design. 
+### V0.0.2
 
-### Gilded Rose Requirements in other languages 
+- Writing the test suite in BDD Style ([given-when-then](https://en.wikipedia.org/wiki/Given-When-Then)).
+- Change Sulfaras and Backstage passes to the Strings defined in the requirements
 
-- [English](GildedRoseRequirements.txt)
-- [Español](GildedRoseRequirements_es.md)
-- [Français](GildedRoseRequirements_fr.md)
-- [日本語](GildedRoseRequirements_jp.md)
-- [Português](GildedRoseRequirements_pt-BR.md)
-- [Русский](GildedRoseRequirements_ru.txt)
-- [ไทย](GildedRoseRequirements_th.md)
-- [中文](GildedRoseRequirements_zh.txt)
-- [한국어](GildedRoseRequirements_kr.md)
-- [German](GildedRoseRequirements_de.md)
+### V0.0.3
 
-## Text-Based Approval Testing
+- Start with the most intended (most nested) parts of the code
+- Change Conditions
+- Inverse Conditions
+- Make else the "default" branch for normal items
+- Remove Conditions by min or max clipping the quality value
 
-Most language versions of this code have a [TextTest](https://texttest.org) fixture for Approval testing. For information about this, see the [TextTests README](https://github.com/emilybache/GildedRose-Refactoring-Kata/tree/main/texttests)
+### V0.0.4
 
-## Translating this code
+- Merge branches, so the conditions, e.g. `Backstage passes` is not checked twice
 
-More translations are most welcome! I'm very open for pull requests that translate the starting position into additional languages. 
+### V0.0.5
 
-Please note a translation should ideally include:
+- Separate immutable values from modifications. Rather Compute the quality value/increment, and assign the computed
+  value in the end: Calculate the quality increment
+- Move assignments out the branches to top level
+- Move queries to top level
+- Extract methods on calculations in between branch-bodies (if-else)
 
-- a translation of the production code for 'update_quality' and Item
-- one failing unit test complaining that "fixme" != "foo"
-- a TextTest fixture, ie a command-line program that runs update_quality on the sample data for the number of days specified.
+### V0.0.6
 
-Please don't write too much code in the starting position or add too many unit tests. The idea with the one failing unit test is to tempt people to work out how to fix it, discover it wasn't that hard, and now they understand what this test is doing they realize they can improve it.  
+- Also calculate the sell-in value: Out of symmetry to the quality value
+- Refactor into static function
 
-If your programming language doesn't have an easy way to add a command-line interface, then the TextTest fixture is probably not necessary.
+### V0.0.7
 
+- Instead of the increment, calculate quality directly
+- Remove top level Condition for `Sulfaras`. Different abstraction level
+    - By moving the clipping (min/max) to the new `calculate_quality` method
+- For symmetry, also calculate sell_directly instead of its increment
+
+### V0.0.8
+
+- Instead of `if-else` branching, use polymorphism: Therefore move logic into classes
+
+### V0.0.9
+
+- Do the same with the `sell_in` calculation. But use default behaviour on a trait, as only `Sulfaras` differs.
+
+### V0.0.10
+
+- Move increment methods from gilded to the new classes, because of different level ob abstraction
+- Move shared increment logic to its own class, so the `GildedRose` class is free of the "how to increment" logic
+
+### V0.0.11
+
+- The refactoring is fine for me, of course you can still refactor. But now adding the `Conjured` items seems to be
+  pretty straight forward
+- What do I need to implement for it?:
+    - Factory returning a new class
+    - Implement both needed traits: `CalculateQuality` and `CalculateSellIn`
+    - Calculate the increment as delegate: But we can re-use everything.
+- But first: **Implement the tests first!**
+- Then implement!
+
+# Learnings
+
+- Write tests first
+- Even if the code exists already
+- Make the tests fail first, therefore temporarily change the production code, so you know the test actually tests the
+  part of the code you actually want to test :)
+- Make **small** refactoring steps, then test. If the tests fail, undo your changes. No need for debugging.
+- Change things when needed. If a prior refactoring does not fit anymore - change it to your current needs (e.g. a name
+  for function does not fit anymore after two commits, change it)
