@@ -33,7 +33,8 @@ trait CalculateSellIn {
 }
 
 struct AgedBrie;
-impl AgedBrie{
+
+impl AgedBrie {
     fn calculate_quality_increment(sell_in: i32) -> i32 {
         GildedRose::calculate_item_quality_increment(sell_in)
     }
@@ -49,9 +50,23 @@ impl CalculateSellIn for AgedBrie {}
 
 struct BackstagePasses;
 
+impl BackstagePasses {
+    fn calculate_item_quality_increment(&self, sell_in: i32, quality: i32) -> i32 {
+        if sell_in < 11 && sell_in > 5 {
+            2
+        } else if sell_in <= 5 && sell_in > 0 {
+            3
+        } else if sell_in <= 0 {
+            -quality
+        } else {
+            1
+        }
+    }
+}
+
 impl CalculateQuality for BackstagePasses {
     fn calculate_new_quality(&self, sell_in: i32, quality: i32) -> i32 {
-        (quality + GildedRose::calculate_backstage_pass_quality_increment(sell_in, quality)).min(50)
+        (quality + self.calculate_item_quality_increment(sell_in, quality)).min(50)
     }
 }
 
@@ -132,18 +147,6 @@ impl GildedRose {
     fn calculate_quality(&self, item: &Item) -> i32 {
         CalculatorFactory::create_calculator(&item)
             .calculate_new_quality(item.sell_in, item.quality)
-    }
-
-    fn calculate_backstage_pass_quality_increment(sell_in: i32, quality: i32) -> i32 {
-        if sell_in < 11 && sell_in > 5 {
-            2
-        } else if sell_in <= 5 && sell_in > 0 {
-            3
-        } else if sell_in <= 0 {
-            -quality
-        } else {
-            1
-        }
     }
 
     fn calculate_item_quality_increment(sell_in: i32) -> i32 {
