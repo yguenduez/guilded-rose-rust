@@ -36,7 +36,7 @@ struct AgedBrie;
 
 impl AgedBrie {
     fn calculate_quality_increment(sell_in: i32) -> i32 {
-        -GildedRose::calculate_item_quality_increment(sell_in)
+        -DefaultQualityIncrement::get(sell_in)
     }
 }
 
@@ -90,7 +90,7 @@ struct DefaultItem;
 
 impl DefaultItem {
     fn calculate_item_quality_increment(&self, sell_in: i32) -> i32 {
-        GildedRose::calculate_item_quality_increment(sell_in)
+        DefaultQualityIncrement::get(sell_in)
     }
 }
 
@@ -154,8 +154,12 @@ impl GildedRose {
         CalculatorFactory::create_calculator(&item)
             .calculate_new_quality(item.sell_in, item.quality)
     }
+}
 
-    fn calculate_item_quality_increment(sell_in: i32) -> i32 {
+struct DefaultQualityIncrement;
+
+impl DefaultQualityIncrement {
+    fn get(sell_in: i32) -> i32 {
         if sell_in < 1 {
             -2
         } else {
