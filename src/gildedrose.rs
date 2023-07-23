@@ -170,6 +170,63 @@ impl DefaultQualityIncrement {
 
 #[cfg(test)]
 mod tests {
+    mod conjured {
+        use crate::gildedrose::{GildedRose, Item};
+
+        #[test]
+        fn when_updated_then_decreases_in_quality_by_two() {
+            // given
+            let item = Item::new("Conjured Cookie", 20, 50);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 48);
+        }
+
+        #[test]
+        fn given_after_sale_when_updated_then_decreases_in_quality_by_four() {
+            // given
+            let item = Item::new("Conjured Cookie", -4, 50);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 46);
+        }
+
+        #[test]
+        fn when_updated_then_sell_in_decreases() {
+            // given
+            let item = Item::new("Conjured Cookie", -4, 50);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].sell_in, -5);
+        }
+
+        #[test]
+        fn given_zero_quality_when_updated_then_quality_is_zero() {
+            // given
+            let item = Item::new("Conjured", 2, 0);
+            let mut rose = GildedRose::new(vec![item]);
+
+            // when
+            rose.update_quality();
+
+            // then
+            assert_eq!(rose.items[0].quality, 0);
+        }
+    }
+
+
     mod ragnaros {
         use crate::gildedrose::{GildedRose, Item};
 
