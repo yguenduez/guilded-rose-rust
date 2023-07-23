@@ -72,14 +72,16 @@ Here are the steps I took. I tried to make them as small as possible - see the g
 
 ### V0.0.11
 
-- The refactoring is fine for me, of course you can still refactor. But now adding the `Conjured` items seems to be
-  pretty straight forward
-- What do I need to implement for it?:
-    - Factory returning a new class
-    - Implement both needed traits: `CalculateQuality` and `CalculateSellIn`
-    - Calculate the increment as delegate: But we can re-use everything.
-- But first: **Implement the tests first!**
-- Then implement!
+The refactoring is fine for me, of course you can still refactor. But now adding the `Conjured` items seems to be
+  pretty straight forward  
+What do I need to implement for it?:
+- Factory returning a new class
+- Implement both needed traits: `CalculateQuality` and `CalculateSellIn`
+- Calculate the increment as delegate: But we can re-use everything.
+
+Done:
+- Write test suite for conjured cookie
+- Implement as stated above
 
 # Learnings
 
