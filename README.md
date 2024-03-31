@@ -65,12 +65,12 @@ Here are the steps I took. I tried to make them as small as possible - see the g
 
 - Do the same with the `sell_in` calculation. But use default behaviour on a trait, as only `Sulfaras` differs.
 
-### V0.0.10
+### V0.0.9 (V0.0.10)
 
 - Move increment methods from gilded to the new classes, because of different level ob abstraction
 - Move shared increment logic to its own class, so the `GildedRose` class is free of the "how to increment" logic
 
-### V0.0.11
+### V0.0.9 (V0.0.11)
 
 The refactoring is fine for me, of course you can still refactor. But now adding the `Conjured` items seems to be
   pretty straight forward  
@@ -92,3 +92,7 @@ Done:
 - Make **small** refactoring steps, then test. If the tests fail, undo your changes. No need for debugging.
 - Change things when needed. If a prior refactoring does not fit anymore - change it to your current needs (e.g. a name
   for function does not fit anymore after two commits, change it)
+
+# Note 
+
+- Tags v0.0.10 and v.0.0.11 do not exist anymore, as they got amended into the v0.0.9
